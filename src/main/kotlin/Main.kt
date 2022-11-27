@@ -4,7 +4,6 @@ import react.create
 import react.dom.client.createRoot
 
 fun main() {
-    val container = document.createElement("div")
-    document.body!!.appendChild(container)
-    createRoot(container).render(Root.create())
+    val root = document.getElementById("root")!!
+    createRoot(root).render(Root.create())
 }

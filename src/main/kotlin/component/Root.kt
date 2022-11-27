@@ -17,10 +17,11 @@ val Root = FC<Nothing> {
                 this.session = session!!
             }
             css {
-                width = 20.pct
-                borderStyle = LineStyle.solid
+                width = 25.pct
+                height = 100.pct
+                float = Float.left
+                borderLeftStyle = LineStyle.solid
                 borderWidth = LineWidth.thin
-                display = Display.inlineBlock
             }
         }
         div {
@@ -29,10 +30,12 @@ val Root = FC<Nothing> {
                 this.chat = null
             }
             css {
-                width = 50.pct
-                borderStyle = LineStyle.solid
+                width = 49.pct
+                height = 100.pct
+                float = Float.left
+                borderLeftStyle = LineStyle.solid
+                borderRightStyle = LineStyle.solid
                 borderWidth = LineWidth.thin
-                display = Display.inlineBlock
             }
         }
         div {
@@ -44,10 +47,11 @@ val Root = FC<Nothing> {
                 }
             }
             css {
-                width = 20.pct
-                borderStyle = LineStyle.solid
+                width = 25.pct
+                height = 100.pct
+                float = Float.left
+                borderRightStyle = LineStyle.solid
                 borderWidth = LineWidth.thin
-                display = Display.inlineBlock
             }
         }
     } else {

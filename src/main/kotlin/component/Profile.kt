@@ -3,6 +3,7 @@ package component
 import client.getCurrentUser
 import csstype.Display
 import csstype.Float
+import csstype.px
 import emotion.react.css
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,23 +31,28 @@ val Profile = FC<ProfileProps> { props ->
     }
 
     div {
-        b {
-            +"Profile"
-        }
-        button {
-            +"Sign Out"
-            onClick = { _ -> props.onSignOut() }
-            css {
-                display = Display.inlineBlock
-                float = Float.right
+        div {
+            b {
+                +"Profile"
+            }
+            button {
+                +"Sign Out"
+                onClick = { _ -> props.onSignOut() }
+                css {
+                    display = Display.inlineBlock
+                    float = Float.right
+                }
             }
         }
-    }
-    hr()
-    div {
-        +(user?.nickname ?: "...")
-    }
-    div {
-        +(user?.name ?: "...")
+        hr()
+        div {
+            +(user?.nickname ?: "...")
+        }
+        div {
+            +(user?.name ?: "...")
+        }
+        css {
+            padding = 4.px
+        }
     }
 }
