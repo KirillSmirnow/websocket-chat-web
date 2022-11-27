@@ -1,0 +1,7 @@
+server {
+    listen $PORT;
+    location $HOMEPAGE {
+        root /app;
+        try_files $uri /index.html;
+    }
+}

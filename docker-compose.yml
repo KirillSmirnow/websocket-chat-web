@@ -1,0 +1,10 @@
+version: '3'
+services:
+  main:
+    build: .
+    restart: always
+    environment:
+      PORT:
+      HOMEPAGE:
+    ports:
+      - ${PORT:-80}:${PORT:-80}
