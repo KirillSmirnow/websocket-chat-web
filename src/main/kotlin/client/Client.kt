@@ -9,6 +9,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import model.chat.Chat
+import model.chat.Message
 import model.user.Session
 import model.user.User
 
@@ -41,6 +42,14 @@ suspend fun getCurrentUser(session: Session): User {
 
 suspend fun getCurrentUserChats(session: Session): PartialQueryResult<Chat> {
     return client.get("$BASE_URL/chats") {
+        parameter("maxResults", 100)
+        bearerAuth(session.id)
+    }.body()
+}
+
+suspend fun getChatMessages(session: Session, chat: Chat): PartialQueryResult<Message> {
+    return client.get("$BASE_URL/chats/${chat.id}/messages") {
+        parameter("maxResults", 100)
         bearerAuth(session.id)
     }.body()
 }
