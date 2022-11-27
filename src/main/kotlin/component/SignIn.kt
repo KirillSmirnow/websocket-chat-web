@@ -2,7 +2,6 @@ package component
 
 import client.PasswordSignIn
 import client.startSession
-import csstype.Auto
 import csstype.TextAlign
 import csstype.pct
 import csstype.px
@@ -26,51 +25,45 @@ val SignIn = FC<SignInProps> { props ->
     val passwordSignIn = PasswordSignIn(null, null)
 
     div {
-        div {
-            label {
-                +"Nickname"
-            }
+        label {
+            +"Nickname"
         }
-        div {
-            input {
-                onChange = { event -> passwordSignIn.nickname = event.target.value }
-                css {
-                    width = 100.pct
-                }
-            }
-        }
-        div {
-            label {
-                +"Password"
-            }
-        }
-        div {
-            input {
-                type = InputType.password
-                onChange = { event -> passwordSignIn.password = event.target.value }
-                css {
-                    width = 100.pct
-                }
-            }
-        }
-        div {
-            button {
-                +"Sign In"
-                onClick = { _ ->
-                    GlobalScope.launch {
-                        val session = startSession(passwordSignIn)
-                        props.onSignIn(session)
-                    }
-                }
-            }
+    }
+    div {
+        input {
+            onChange = { event -> passwordSignIn.nickname = event.target.value }
             css {
-                marginTop = 10.px
-                textAlign = TextAlign.center
+                width = 100.pct
+            }
+        }
+    }
+    div {
+        label {
+            +"Password"
+        }
+    }
+    div {
+        input {
+            type = InputType.password
+            onChange = { event -> passwordSignIn.password = event.target.value }
+            css {
+                width = 100.pct
+            }
+        }
+    }
+    div {
+        button {
+            +"Sign In"
+            onClick = { _ ->
+                GlobalScope.launch {
+                    val session = startSession(passwordSignIn)
+                    props.onSignIn(session)
+                }
             }
         }
         css {
-            width = 200.px
-            margin = Auto.auto
+            marginTop = 10.px
+            textAlign = TextAlign.center
         }
     }
 }

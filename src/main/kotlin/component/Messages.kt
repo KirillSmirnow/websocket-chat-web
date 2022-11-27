@@ -1,18 +1,19 @@
 package component
 
-import model.chat.Message
+import model.chat.Chat
+import model.user.Session
 import react.FC
 import react.Props
-import react.dom.html.ReactHTML.div
 
 external interface MessagesProps : Props {
-    var messages: List<Message>
+    var session: Session
+    var chat: Chat?
 }
 
 val Messages = FC<MessagesProps> { props ->
-    for (message in props.messages) {
-        div {
-            +message.text
-        }
+    if (props.chat != null) {
+        +"..."
+    } else {
+        +"Select Chat"
     }
 }

@@ -1,20 +1,15 @@
 package component
 
-import csstype.Display
-import csstype.LineStyle
-import csstype.LineWidth
-import csstype.pct
+import csstype.*
 import emotion.react.css
-import kotlinx.datetime.LocalDateTime
-import model.chat.Message
 import model.user.Session
-import model.user.User
 import react.FC
 import react.dom.html.ReactHTML.div
 import react.useState
+import repository.SessionRepository
 
 val Root = FC<Nothing> {
-    var session: Session? by useState(Session("6b67f5ec-5603-4d8d-81a1-0b5bda25334f"))
+    var session: Session? by useState(SessionRepository.get())
 
     if (session != null) {
         div {
@@ -30,9 +25,8 @@ val Root = FC<Nothing> {
         }
         div {
             Messages {
-                this.messages = listOf(
-                    Message("123", User(2, "", "Max"), LocalDateTime(2022, 1, 1, 10, 0), "Hello!"),
-                )
+                this.session = session!!
+                this.chat = null
             }
             css {
                 width = 50.pct
@@ -44,7 +38,10 @@ val Root = FC<Nothing> {
         div {
             Profile {
                 this.session = session!!
-                this.onSignOut = { session = null }
+                this.onSignOut = {
+                    SessionRepository.clear()
+                    session = null
+                }
             }
             css {
                 width = 20.pct
@@ -56,7 +53,14 @@ val Root = FC<Nothing> {
     } else {
         div {
             SignIn {
-                this.onSignIn = { newSession -> session = newSession }
+                this.onSignIn = { newSession ->
+                    SessionRepository.save(newSession)
+                    session = newSession
+                }
+            }
+            css {
+                width = 200.px
+                margin = Auto.auto
             }
         }
     }
