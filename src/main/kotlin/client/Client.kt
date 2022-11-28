@@ -2,11 +2,15 @@ package client
 
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.browser.window
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import model.chat.Chat
 import model.chat.Message
@@ -19,10 +23,40 @@ val client = HttpClient {
     install(ContentNegotiation) {
         json(Json { ignoreUnknownKeys = true })
     }
+    expectSuccess = true
+    HttpResponseValidator {
+        handleResponseExceptionWithRequest { cause, _ ->
+            when (cause) {
+                is ServerResponseException -> {
+                    val responseContent = cause.response.bodyAsText()
+                    window.alert(responseContent)
+                }
+            }
+        }
+    }
 }
 
 @Serializable
 data class PartialQueryResult<T>(val totalElements: Long, val content: List<T>)
+
+@Serializable
+data class UserRegistration(
+    var nickname: String?,
+    var password: String?,
+    @Transient var passwordConfirmation: String? = null,
+    var name: String?,
+) {
+    fun isPasswordConfirmed(): Boolean {
+        return password == passwordConfirmation
+    }
+}
+
+suspend fun registerUser(userRegistration: UserRegistration): Session {
+    return client.post("$BASE_URL/users") {
+        contentType(ContentType.Application.Json)
+        setBody(userRegistration)
+    }.body()
+}
 
 @Serializable
 data class PasswordSignIn(var nickname: String?, var password: String?)
