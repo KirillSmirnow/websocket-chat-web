@@ -87,3 +87,14 @@ suspend fun getChatMessages(session: Session, chat: Chat): PartialQueryResult<Me
         bearerAuth(session.id)
     }.body()
 }
+
+@Serializable
+data class MessageSending(var text: String?)
+
+suspend fun sendMessage(session: Session, chat: Chat, messageSending: MessageSending): Message {
+    return client.post("$BASE_URL/chats/${chat.id}/messages") {
+        bearerAuth(session.id)
+        contentType(ContentType.Application.Json)
+        setBody(messageSending)
+    }.body()
+}

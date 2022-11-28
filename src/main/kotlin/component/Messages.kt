@@ -1,7 +1,9 @@
 package component
 
+import client.MessageSending
 import client.getChatMessages
 import client.getCurrentUser
+import client.sendMessage
 import csstype.*
 import emotion.react.css
 import kotlinx.coroutines.GlobalScope
@@ -12,8 +14,10 @@ import model.user.Session
 import model.user.User
 import react.FC
 import react.Props
+import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.img
+import react.dom.html.ReactHTML.input
 import react.useState
 
 external interface MessagesProps : Props {
@@ -38,6 +42,16 @@ val Messages = FC<MessagesProps> { props ->
         }
     }
 
+    div {
+        +(props.chat?.name ?: "Select Chat")
+        css {
+            height = 20.px
+            padding = 10.px
+            borderWidth = LineWidth.thin
+            borderBottomStyle = LineStyle.solid
+            fontWeight = FontWeight.bold
+        }
+    }
     if (messages.isEmpty()) {
         div {
             img {
@@ -76,9 +90,47 @@ val Messages = FC<MessagesProps> { props ->
                 }
             }
             css {
-                height = 98.pct
+                height = 50.pct
                 padding = 4.px
                 overflowY = Overflow.scroll
+            }
+        }
+    }
+    val chat = props.chat
+    if (chat != null) {
+        val messageSending = MessageSending(null)
+        div {
+            div {
+                input {
+                    onChange = { event -> messageSending.text = event.target.value }
+                    css {
+                        width = 100.pct
+                    }
+                }
+                css {
+                    width = 420.px
+                    display = Display.inlineBlock
+                    paddingRight = 10.px
+                }
+            }
+            div {
+                button {
+                    +"|>"
+                    onClick = {
+                        GlobalScope.launch {
+                            sendMessage(props.session, chat, messageSending)
+                        }
+                    }
+                }
+                css {
+                    width = 30.px
+                    display = Display.inlineBlock
+                    paddingLeft = 10.px
+                }
+            }
+            css {
+                padding = 5.px
+                textAlign = TextAlign.center
             }
         }
     }
