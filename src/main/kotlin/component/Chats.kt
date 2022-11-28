@@ -1,8 +1,9 @@
 package component
 
-import client.getCurrentUserChats
+import client.*
 import csstype.*
 import emotion.react.css
+import kotlinx.browser.window
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import model.chat.Chat
@@ -34,13 +35,36 @@ val Chats = FC<ChatsProps> { props ->
         div {
             b {
                 +"Chats"
+                css {
+                    flexGrow = number(1.0)
+                }
             }
             button {
-                +"+"
-                css {
-                    display = Display.inlineBlock
-                    float = Float.right
+                +"New"
+                onClick = {
+                    val name = window.prompt("Name")
+                    if (name != null) {
+                        GlobalScope.launch {
+                            createChat(props.session, ChatCreation(name))
+                            initialized = false
+                        }
+                    }
                 }
+            }
+            button {
+                +"Join"
+                onClick = {
+                    val invitationCode = window.prompt("Invitation Code")
+                    if (invitationCode != null) {
+                        GlobalScope.launch {
+                            joinChat(props.session, ChatJoining(invitationCode))
+                            initialized = false
+                        }
+                    }
+                }
+            }
+            css {
+                display = Display.flex
             }
         }
         hr()

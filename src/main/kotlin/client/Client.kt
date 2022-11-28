@@ -81,6 +81,28 @@ suspend fun getCurrentUserChats(session: Session): PartialQueryResult<Chat> {
     }.body()
 }
 
+@Serializable
+data class ChatCreation(var name: String?)
+
+suspend fun createChat(session: Session, chatCreation: ChatCreation): Chat {
+    return client.post("$BASE_URL/chats") {
+        bearerAuth(session.id)
+        contentType(ContentType.Application.Json)
+        setBody(chatCreation)
+    }.body()
+}
+
+@Serializable
+data class ChatJoining(var invitationCode: String?)
+
+suspend fun joinChat(session: Session, chatJoining: ChatJoining): Chat {
+    return client.put("$BASE_URL/chats/joining") {
+        bearerAuth(session.id)
+        contentType(ContentType.Application.Json)
+        setBody(chatJoining)
+    }.body()
+}
+
 suspend fun getChatMessages(session: Session, chat: Chat): PartialQueryResult<Message> {
     return client.get("$BASE_URL/chats/${chat.id}/messages") {
         parameter("maxResults", 100)
