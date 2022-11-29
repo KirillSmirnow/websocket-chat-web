@@ -1,9 +1,6 @@
 package component
 
-import client.MessageSending
-import client.getChatMessages
-import client.getCurrentUser
-import client.sendMessage
+import client.*
 import csstype.*
 import emotion.react.css
 import kotlinx.coroutines.GlobalScope
@@ -23,6 +20,7 @@ import react.useState
 external interface MessagesProps : Props {
     var session: Session
     var chat: Chat?
+    var webSocket: WebSocket
 }
 
 val Messages = FC<MessagesProps> { props ->
@@ -39,6 +37,7 @@ val Messages = FC<MessagesProps> { props ->
         if (user == null) {
             user = getCurrentUser(props.session)
         }
+        props.webSocket.subscribe(props.session) { initializedChat = null }
     }
 
     div {

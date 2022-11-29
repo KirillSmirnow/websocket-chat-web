@@ -1,5 +1,6 @@
 package component
 
+import client.WebSocket
 import csstype.*
 import emotion.react.css
 import model.chat.Chat
@@ -12,6 +13,7 @@ import repository.SessionRepository
 val Root = FC<Nothing> {
     var session: Session? by useState(SessionRepository.get())
     var chat: Chat? by useState(null)
+    val webSocket: WebSocket by useState(WebSocket())
 
     if (session != null) {
         div {
@@ -31,6 +33,7 @@ val Root = FC<Nothing> {
             Messages {
                 this.session = session!!
                 this.chat = chat
+                this.webSocket = webSocket
             }
             css {
                 width = 49.pct
@@ -46,6 +49,7 @@ val Root = FC<Nothing> {
                 this.session = session!!
                 this.onSignOut = {
                     SessionRepository.clear()
+                    webSocket.unsubscribe()
                     session = null
                 }
             }
