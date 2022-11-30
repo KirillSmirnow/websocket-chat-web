@@ -7,4 +7,4 @@ services:
       PORT:
       HOMEPAGE:
     ports:
-      - ${PORT:-80}:${PORT:-80}
+      - 127.0.0.1:${PORT:-80}:${PORT:-80}

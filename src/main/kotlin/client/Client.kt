@@ -17,7 +17,7 @@ import model.chat.Message
 import model.user.Session
 import model.user.User
 
-const val BASE_URL = "http://206.81.21.172:38676/api"
+const val BASE_URL = "https://comunicazione.art/api"
 
 val client = HttpClient {
     install(ContentNegotiation) {

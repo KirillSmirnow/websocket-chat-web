@@ -9,7 +9,7 @@ jobs:
     runs-on: self-hosted
     env:
       PROFILE: prod
-      PORT: 80
+      PORT: 28925
       HOMEPAGE: /
     steps:
       - uses: actions/checkout@v2
