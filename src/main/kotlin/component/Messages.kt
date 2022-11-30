@@ -9,6 +9,8 @@ import model.chat.Chat
 import model.chat.Message
 import model.user.Session
 import model.user.User
+import org.w3c.notifications.Notification
+import org.w3c.notifications.NotificationOptions
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.button
@@ -37,7 +39,13 @@ val Messages = FC<MessagesProps> { props ->
         if (user == null) {
             user = getCurrentUser(props.session)
         }
-        props.webSocket.subscribe(props.session) { initializedChat = null }
+        Notification.requestPermission()
+        props.webSocket.subscribe(props.session) { message ->
+            initializedChat = null
+            if (message.sender != user) {
+                Notification(message.sender.name, options = NotificationOptions(body = message.text))
+            }
+        }
     }
 
     div {
