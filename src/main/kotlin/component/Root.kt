@@ -45,18 +45,38 @@ val Root = FC<Nothing> {
             }
         }
         div {
-            Profile {
-                this.session = session!!
-                this.onSignOut = {
-                    SessionRepository.clear()
-                    webSocket.unsubscribe()
-                    session = null
+            div {
+                Profile {
+                    this.session = session!!
+                    this.onSignOut = {
+                        SessionRepository.clear()
+                        webSocket.unsubscribe()
+                        session = null
+                    }
+                }
+                css {
+                    height = 150.px
+                    minHeight = 150.px
+                }
+            }
+            div {
+                ChatMembers {
+                    this.session = session!!
+                    this.chat = chat
+                }
+                css {
+                    flexGrow = number(1.0)
+                    overflowY = Overflow.scroll
+                    borderWidth = LineWidth.thin
+                    borderTopStyle = LineStyle.solid
                 }
             }
             css {
                 width = 25.pct
                 height = 100.pct
                 float = Float.left
+                display = Display.flex
+                flexDirection = FlexDirection.column
                 borderRightStyle = LineStyle.solid
                 borderWidth = LineWidth.thin
             }

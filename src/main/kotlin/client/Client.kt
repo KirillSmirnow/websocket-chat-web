@@ -103,6 +103,13 @@ suspend fun joinChat(session: Session, chatJoining: ChatJoining): Chat {
     }.body()
 }
 
+suspend fun getChatMembers(session: Session, chat: Chat): PartialQueryResult<User> {
+    return client.get("$BASE_URL/chats/${chat.id}/members") {
+        parameter("maxResults", 100)
+        bearerAuth(session.id)
+    }.body()
+}
+
 suspend fun getChatMessages(session: Session, chat: Chat): PartialQueryResult<Message> {
     return client.get("$BASE_URL/chats/${chat.id}/messages") {
         parameter("maxResults", 100)
