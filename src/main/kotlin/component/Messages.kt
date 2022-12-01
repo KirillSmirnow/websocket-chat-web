@@ -10,6 +10,7 @@ import model.chat.Chat
 import model.chat.Message
 import model.user.Session
 import model.user.User
+import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.notifications.Notification
 import org.w3c.notifications.NotificationOptions
@@ -28,6 +29,7 @@ external interface MessagesProps : Props {
 }
 
 private const val messageInputId = "Messages.messageInput"
+private const val messagesContainerId = "Messages.messagesContainer"
 
 val Messages = FC<MessagesProps> { props ->
     val selectedChat = props.chat
@@ -50,6 +52,7 @@ val Messages = FC<MessagesProps> { props ->
                 Notification(message.sender.name, options = NotificationOptions(body = message.text))
             }
         }
+        scrollDown()
     }
 
     div {
@@ -96,6 +99,7 @@ val Messages = FC<MessagesProps> { props ->
             }
         } else {
             div {
+                id = messagesContainerId
                 for (message in messages) {
                     div {
                         if (message.sender == user) {
@@ -183,4 +187,9 @@ fun sendMessage(props: MessagesProps) {
         messageInput.focus()
         messageInput.select()
     }
+}
+
+fun scrollDown() {
+    val messagesContainer = document.getElementById(messagesContainerId) as? HTMLDivElement
+    messagesContainer?.scrollTo(0.0, messagesContainer.scrollHeight.toDouble())
 }
