@@ -1,10 +1,7 @@
 package component
 
 import client.getCurrentUser
-import csstype.Display
-import csstype.Float
-import csstype.FontStyle
-import csstype.px
+import csstype.*
 import emotion.react.css
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -49,8 +46,8 @@ val Profile = FC<ProfileProps> { props ->
         div {
             +(user?.nickname ?: "...")
             css {
-                fontStyle = FontStyle.oblique
-                fontSize = 11.px
+                color = Color("SlateGray")
+                fontSize = 11.pt
             }
         }
         div {

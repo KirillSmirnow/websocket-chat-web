@@ -6,6 +6,10 @@ import emotion.react.css
 import kotlinx.browser.document
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import model.chat.Chat
 import model.chat.Message
 import model.user.Session
@@ -21,6 +25,8 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.input
 import react.useState
+import utility.formatMonthDay
+import utility.formatTime
 
 external interface MessagesProps : Props {
     var session: Session
@@ -73,13 +79,14 @@ val Messages = FC<MessagesProps> { props ->
                 button {
                     +(if (showInvitationCode) "Hide Invitation Code" else "Show Invitation Code")
                     onClick = { showInvitationCode = !showInvitationCode }
+                    css {
+                        minWidth = 150.px
+                        marginRight = 10.px
+                    }
                 }
                 if (showInvitationCode) {
                     div {
                         +selectedChat.invitationCode
-                        css {
-                            marginLeft = 10.px
-                        }
                     }
                 }
                 css {
@@ -117,13 +124,23 @@ val Messages = FC<MessagesProps> { props ->
                             }
                         }
                         div {
-                            if (message.sender != user) {
+                            div {
                                 div {
-                                    +message.sender.name
-                                    css {
-                                        fontStyle = FontStyle.oblique
-                                        fontSize = 11.pt
+                                    if (message.sender != user) {
+                                        +message.sender.name
                                     }
+                                    css {
+                                        flexGrow = number(1.0)
+                                        marginRight = 10.px
+                                    }
+                                }
+                                div {
+                                    +formatSentAt(message)
+                                }
+                                css {
+                                    display = Display.flex
+                                    fontSize = 11.pt
+                                    color = Color("SlateGray")
                                 }
                             }
                             +message.text
@@ -199,4 +216,15 @@ fun sendMessage(props: MessagesProps) {
 fun scrollDown() {
     val messagesContainer = document.getElementById(messagesContainerId) as? HTMLDivElement
     messagesContainer?.scrollTo(0.0, messagesContainer.scrollHeight.toDouble())
+}
+
+fun formatSentAt(message: Message): String {
+    val utcDateTime = message.sentAt
+    val timeZone = TimeZone.currentSystemDefault()
+    val localDateTime = utcDateTime.toInstant(TimeZone.UTC).toLocalDateTime(timeZone)
+    val now = Clock.System.now().toLocalDateTime(timeZone)
+    if (localDateTime.date == now.date) {
+        return formatTime(localDateTime.time)
+    }
+    return formatTime(localDateTime.time) + " " + formatMonthDay(localDateTime.date)
 }
