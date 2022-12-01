@@ -58,33 +58,39 @@ val Messages = FC<MessagesProps> { props ->
 
     div {
         div {
-            div {
-                +(selectedChat?.name ?: "Select Chat")
-                css {
-                    fontWeight = FontWeight.bold
-                    flexGrow = number(1.0)
-                }
+            +(selectedChat?.name ?: "Select Chat")
+            css {
+                fontWeight = FontWeight.bold
+                height = 20.px
+                minHeight = 20.px
+                padding = 10.px
+                whiteSpace = WhiteSpace.nowrap
+                overflow = Overflow.hidden
             }
-            if (selectedChat != null) {
-                if (showInvitationCode) {
-                    div {
-                        +selectedChat.invitationCode
-                        css {
-                            marginRight = 10.px
-                        }
-                    }
-                }
+        }
+        if (selectedChat != null) {
+            div {
                 button {
                     +(if (showInvitationCode) "Hide Invitation Code" else "Show Invitation Code")
                     onClick = { showInvitationCode = !showInvitationCode }
                 }
-            }
-            css {
-                height = 20.px
-                padding = 10.px
-                display = Display.flex
-                borderWidth = LineWidth.thin
-                borderBottomStyle = LineStyle.solid
+                if (showInvitationCode) {
+                    div {
+                        +selectedChat.invitationCode
+                        css {
+                            marginLeft = 10.px
+                        }
+                    }
+                }
+                css {
+                    height = 20.px
+                    minHeight = 20.px
+                    padding = 10.px
+                    paddingTop = 0.px
+                    display = Display.flex
+                    borderWidth = LineWidth.thin
+                    borderBottomStyle = LineStyle.solid
+                }
             }
         }
         if (messages.isEmpty()) {

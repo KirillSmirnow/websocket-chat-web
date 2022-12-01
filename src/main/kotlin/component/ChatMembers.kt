@@ -1,6 +1,9 @@
 package component
 
 import client.getChatMembers
+import csstype.Color
+import csstype.LineStyle
+import csstype.LineWidth
 import csstype.px
 import emotion.react.css
 import kotlinx.coroutines.GlobalScope
@@ -35,7 +38,7 @@ val ChatMembers = FC<ChatMembersProps> { props ->
     div {
         div {
             b {
-                +"Chat Members"
+                +"Chat Members (${members.size})"
             }
         }
         hr()
@@ -43,6 +46,13 @@ val ChatMembers = FC<ChatMembersProps> { props ->
             for (member in members) {
                 div {
                     +member.name
+                    css {
+                        borderBottomStyle = LineStyle.solid
+                        borderWidth = LineWidth.thin
+                        hover {
+                            backgroundColor = Color("Gray")
+                        }
+                    }
                 }
             }
         }

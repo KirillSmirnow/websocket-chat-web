@@ -93,6 +93,7 @@ val Chats = FC<ChatsProps> { props ->
             height = 98.pct
             padding = 4.px
             overflowY = Overflow.scroll
+            overflowX = Overflow.hidden
         }
     }
 }

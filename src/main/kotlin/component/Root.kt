@@ -67,6 +67,7 @@ val Root = FC<Nothing> {
                 css {
                     flexGrow = number(1.0)
                     overflowY = Overflow.scroll
+                    overflowX = Overflow.hidden
                     borderWidth = LineWidth.thin
                     borderTopStyle = LineStyle.solid
                 }
