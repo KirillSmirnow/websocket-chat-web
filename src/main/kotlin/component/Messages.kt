@@ -3,12 +3,14 @@ package component
 import client.*
 import csstype.*
 import emotion.react.css
+import kotlinx.browser.document
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import model.chat.Chat
 import model.chat.Message
 import model.user.Session
 import model.user.User
+import org.w3c.dom.HTMLInputElement
 import org.w3c.notifications.Notification
 import org.w3c.notifications.NotificationOptions
 import react.FC
@@ -24,6 +26,8 @@ external interface MessagesProps : Props {
     var chat: Chat?
     var webSocket: WebSocket
 }
+
+private const val messageInputId = "Messages.messageInput"
 
 val Messages = FC<MessagesProps> { props ->
     val selectedChat = props.chat
@@ -138,21 +142,21 @@ val Messages = FC<MessagesProps> { props ->
             }
         }
         if (selectedChat != null) {
-            val messageSending = MessageSending(null)
             div {
                 input {
-                    onChange = { event -> messageSending.text = event.target.value }
+                    id = messageInputId
+                    onKeyDown = { event ->
+                        if (event.key == "Enter") {
+                            sendMessage(props)
+                        }
+                    }
                     css {
                         flexGrow = number(1.0)
                     }
                 }
                 button {
                     +"|>"
-                    onClick = {
-                        GlobalScope.launch {
-                            sendMessage(props.session, selectedChat, messageSending)
-                        }
-                    }
+                    onClick = { sendMessage(props) }
                 }
                 css {
                     display = Display.flex
@@ -167,5 +171,16 @@ val Messages = FC<MessagesProps> { props ->
             display = Display.flex
             flexDirection = FlexDirection.column
         }
+    }
+}
+
+fun sendMessage(props: MessagesProps) {
+    GlobalScope.launch {
+        val messageInput = document.getElementById(messageInputId) as HTMLInputElement
+        if (messageInput.value.isBlank()) return@launch
+        sendMessage(props.session, props.chat!!, MessageSending(messageInput.value))
+        messageInput.value = ""
+        messageInput.focus()
+        messageInput.select()
     }
 }
