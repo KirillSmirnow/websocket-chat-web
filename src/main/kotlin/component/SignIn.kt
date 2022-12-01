@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import model.user.Session
 import react.FC
 import react.Props
+import react.dom.html.AutoComplete
 import react.dom.html.InputType
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
@@ -37,6 +38,7 @@ val SignIn = FC<SignInProps> { props ->
             }
             div {
                 input {
+                    autoComplete = AutoComplete.username
                     onChange = { event -> passwordSignIn.nickname = event.target.value }
                     css {
                         width = 100.pct
@@ -51,6 +53,7 @@ val SignIn = FC<SignInProps> { props ->
             div {
                 input {
                     type = InputType.password
+                    autoComplete = AutoComplete.currentPassword
                     onChange = { event -> passwordSignIn.password = event.target.value }
                     css {
                         width = 100.pct
@@ -95,6 +98,7 @@ val SignIn = FC<SignInProps> { props ->
             }
             div {
                 input {
+                    autoComplete = AutoComplete.off
                     onChange = { event -> userRegistration.nickname = event.target.value }
                     css {
                         width = 100.pct
@@ -108,6 +112,7 @@ val SignIn = FC<SignInProps> { props ->
             }
             div {
                 input {
+                    autoComplete = AutoComplete.off
                     onChange = { event -> userRegistration.name = event.target.value }
                     css {
                         width = 100.pct
@@ -122,6 +127,7 @@ val SignIn = FC<SignInProps> { props ->
             div {
                 input {
                     type = InputType.password
+                    autoComplete = AutoComplete.newPassword
                     onChange = { event -> userRegistration.password = event.target.value }
                     css {
                         width = 100.pct
@@ -136,6 +142,7 @@ val SignIn = FC<SignInProps> { props ->
             div {
                 input {
                     type = InputType.password
+                    autoComplete = AutoComplete.newPassword
                     onChange = { event -> userRegistration.passwordConfirmation = event.target.value }
                     css {
                         width = 100.pct
