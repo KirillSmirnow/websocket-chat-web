@@ -48,9 +48,10 @@ val Messages = FC<MessagesProps> { props ->
         Notification.requestPermission()
         props.webSocket.subscribe(props.session) { message ->
             initializedChat = null
-            if (message.sender != user) {
-                Notification(message.sender.name, options = NotificationOptions(body = message.text))
-            }
+            Notification(
+                "${message.chat.name} / ${message.sender.name}",
+                options = NotificationOptions(body = message.text)
+            )
         }
         scrollDown()
     }
