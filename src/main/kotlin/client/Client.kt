@@ -27,6 +27,15 @@ val client = HttpClient {
     HttpResponseValidator {
         handleResponseExceptionWithRequest { cause, _ ->
             when (cause) {
+                is ClientRequestException -> {
+                    val errors: List<Error> = cause.response.body()
+                    val message = errors.groupBy({ it.field }, { it.message })
+                        .mapValues { it.value.joinToString() }
+                        .entries
+                        .joinToString("\n") { if (it.key != null) "${it.key}: ${it.value}" else it.value }
+                    window.alert(message)
+                }
+
                 is ServerResponseException -> {
                     val responseContent = cause.response.bodyAsText()
                     window.alert(responseContent)
@@ -35,6 +44,9 @@ val client = HttpClient {
         }
     }
 }
+
+@Serializable
+data class Error(val message: String, val field: String?)
 
 @Serializable
 data class PartialQueryResult<T>(val totalElements: Long, val content: List<T>)
